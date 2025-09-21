@@ -50,3 +50,5 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
    
+# Ignore local Windows launcher scripts
+*.bat

@@ -14,14 +14,14 @@ from typing import List
 
 # Variables needed
 operations: List[str] = ["add", "subtract", "divide", "multiply"]
-
-
-# Opening
-menu.show_menu()
     
 # Main function
 def main():
     while True:
+        
+        # Opening
+        menu.show_menu()
+
         inputChoice: str = input('Enter command: ').lower()
 # Ignores "Enter" keypress to execute else statement
         if not inputChoice.strip():
@@ -33,7 +33,7 @@ def main():
         elif inputChoice == 'math':
 
             try:
-                operationChosen: str = input('Choose Operator: ')
+                operationChosen: str = input('Choose Operator (add, subtract, divide, multiply): ')
             
                 if operationChosen in operations:
                     calculation.calculate(operationChosen)
@@ -51,19 +51,22 @@ def main():
 # Input the location, fetch current weather
         elif inputChoice == 'showweather':
             try:
-                inputCity: str = input('Enter Location: ')
-                fetchFromWeather = weather.fetch_weather_by_location(inputCity)
+                while True:
+                    inputCity: str = input('Enter Location: ')
+                    fetchFromWeather = weather.fetch_weather_by_location(inputCity)
 
-                if "temperature" in fetchFromWeather:
-                    print("\n" + "="*40)
-                    print(f"   🌍  Weather Report for {inputCity.title()} ")
-                    print("="*40)
-                    print(f"🌡️  Temperature : {fetchFromWeather['temperature']}")
-                    print(f"💨  Wind        : {fetchFromWeather['wind']}")
-                    print(f"📝  Description : {fetchFromWeather['description']}")
-                    print("="*40 + "\n")
-                else:
-                    print("\nSimplybot: Couldn't fetch weather. Try another location.\n")
+                    if "temperature" in fetchFromWeather:
+                        print("\n" + "="*40)
+                        print(f"   🌍  Weather Report for {inputCity.title()} ")
+                        print("="*40)
+                        print(f"🌡️  Temperature : {fetchFromWeather['temperature']}")
+                        print(f"💨  Wind        : {fetchFromWeather['wind']}")
+                        print(f"📝  Description : {fetchFromWeather['description']}")
+                        print("="*40 + "\n")
+
+                        break
+                    else:
+                        print("\nSimplybot: Couldn't fetch weather. Try another location.\n")
 
 
             except AttributeError:
