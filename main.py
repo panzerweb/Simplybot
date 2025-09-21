@@ -6,6 +6,8 @@
 # Custom modules
 from modules import calculation
 from modules import randf
+from modules import weather
+import menu
 
 # Predefined modules
 from typing import List
@@ -15,22 +17,19 @@ operations: List[str] = ["add", "subtract", "divide", "multiply"]
 
 
 # Opening
-print(f'Hello there! I am Simplybot, a simple chatbot developed by Panzerweb. How may I help you?\n')
-
-print('There are several capabilities Simplybot can do, type:')
-print('greet -> for Simplybot to greet you back')
-print('math -> to allow for basic calculations')
-print('randf -> to return a random fact')
-print('exit -> to exit chatbot\n')
+menu.show_menu()
     
 # Main function
 def main():
     while True:
-        inputChoice: str = input('What are you gonna do? ').lower()
-
+        inputChoice: str = input('Enter command: ').lower()
+# Ignores "Enter" keypress to execute else statement
+        if not inputChoice.strip():
+            continue
+# Simple greet
         if inputChoice == 'greet':
-            print("\nSimplybot: Hello there")
-
+            print("\nSimplybot: Hello there! I am Simplybot, a simple chatbot developed to do simple things. How may I help you?")
+# Basic Math calculations
         elif inputChoice == 'math':
 
             try:
@@ -45,12 +44,35 @@ def main():
                 print("Module Error: Did not satisfy module logic")
             except Exception as e:
                 print(f"Unexpected Error: {e}")
-        
+# Gives you a random fact
         elif inputChoice == 'randf':
             fetchFromApi = randf.fetch_random_fact()
             print(f'Your random fact for today: {fetchFromApi}')
+# Input the location, fetch current weather
+        elif inputChoice == 'showweather':
+            try:
+                inputCity: str = input('Enter Location: ')
+                fetchFromWeather = weather.fetch_weather_by_location(inputCity)
 
+                if "temperature" in fetchFromWeather:
+                    print("\n" + "="*40)
+                    print(f"   🌍  Weather Report for {inputCity.title()} ")
+                    print("="*40)
+                    print(f"🌡️  Temperature : {fetchFromWeather['temperature']}")
+                    print(f"💨  Wind        : {fetchFromWeather['wind']}")
+                    print(f"📝  Description : {fetchFromWeather['description']}")
+                    print("="*40 + "\n")
+                else:
+                    print("\nSimplybot: Couldn't fetch weather. Try another location.\n")
+
+
+            except AttributeError:
+                print("Module Error: Did not satisfy module logic")
+            except Exception as e:
+                print(f"Unexpected Error: {e}")
+# Exits the program
         elif inputChoice == 'exit':
+            print("\nSimplybot: Goodbye! Have a great day 🚀")
             break
 
         else:
