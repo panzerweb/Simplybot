@@ -7,6 +7,7 @@
 from modules import calculation
 from modules import randf
 from modules import weather
+from modules import chatbot
 import menu
 
 # Predefined modules
@@ -17,19 +18,49 @@ operations: List[str] = ["add", "subtract", "divide", "multiply"]
     
 # Main function
 def main():
+    
+    # Fetch the JSON file for all knowledge as a dictionary
+    knowledge_base = chatbot.load_knowledge('knowledge_base.json')
+
+    # Run program
     while True:
         
         # Opening
         menu.show_menu()
 
+        # First user input
         inputChoice: str = input('Enter command: ').lower()
+
 # Ignores "Enter" keypress to execute else statement
         if not inputChoice.strip():
             continue
-# Simple greet
-        if inputChoice == 'greet':
+# Chatbot implementation
+        if inputChoice == 'chat':
             print("\n" + "="*40 + "\n")
-            print("\nSimplybot: Hello there! I am Simplybot, a simple chatbot developed to do simple things. How may I help you?")
+            
+            while True:
+                chat_input: str = input("You: ")
+
+                if chat_input.lower() == 'quit':
+                    break
+
+                # Find closely related question from the Dictionary to a List
+                best_match = chatbot.find_best_match(chat_input, [question["question"] for question in knowledge_base["questions"]])
+
+                if best_match:
+                    answer: str = chatbot.get_answer_for_question(best_match, knowledge_base)
+                    print(f'Simplybot: {answer}')
+                else:
+                    print(f'Simplybot: I do now know the answer for that one! You can train me by adding me a new knowledge.')
+                    new_answer: str = input("Type the answer or 'skip' to skip: ")
+
+                    if new_answer.lower() != 'skip':
+                        knowledge_base["questions"].append({"question": chat_input, "answer": new_answer})
+                        chatbot.save_knowledge('knowledge_base.json', knowledge_base)
+                        print(f'Thank you for this knowledge!')
+                    else:
+                        break
+            
             print("\n" + "="*40 + "\n")
             
 # Basic Math calculations
@@ -96,6 +127,5 @@ def main():
             print("\n" + "="*40)
             print("\nSimplybot: I don't understand your message! Please try again")
             print("\n" + "="*40)
-
 
 main()
