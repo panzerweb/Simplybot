@@ -28,7 +28,10 @@ def main():
             continue
 # Simple greet
         if inputChoice == 'greet':
+            print("\n" + "="*40 + "\n")
             print("\nSimplybot: Hello there! I am Simplybot, a simple chatbot developed to do simple things. How may I help you?")
+            print("\n" + "="*40 + "\n")
+            
 # Basic Math calculations
         elif inputChoice == 'math':
 
@@ -46,8 +49,15 @@ def main():
                 print(f"Unexpected Error: {e}")
 # Gives you a random fact
         elif inputChoice == 'randf':
-            fetchFromApi = randf.fetch_random_fact()
-            print(f'Your random fact for today: {fetchFromApi}')
+            try:
+                fetchFromApi = randf.fetch_random_fact()
+                print("\n" + "="*40 + "\n")
+                print(f'Your random fact for today: {fetchFromApi}')
+                print("\n" + "="*40 + "\n")
+            except Exception as e:
+                print("\n" + "="*40 + "\n")
+                print(f'Unexpected error: {e}')
+                print("\n" + "="*40 + "\n")
 # Input the location, fetch current weather
         elif inputChoice == 'showweather':
             try:
@@ -66,7 +76,9 @@ def main():
 
                         break
                     else:
+                        print("\n" + "="*40 + "\n")
                         print("\nSimplybot: Couldn't fetch weather. Try another location.\n")
+                        print("\n" + "="*40 + "\n")
 
 
             except AttributeError:
@@ -75,11 +87,15 @@ def main():
                 print(f"Unexpected Error: {e}")
 # Exits the program
         elif inputChoice == 'exit':
+            print("\n" + "="*40)
             print("\nSimplybot: Goodbye! Have a great day 🚀")
+            print("\n" + "="*40)
             break
 
         else:
+            print("\n" + "="*40)
             print("\nSimplybot: I don't understand your message! Please try again")
+            print("\n" + "="*40)
 
 
 main()

@@ -1,4 +1,6 @@
 def show_menu():
+
+    print("\n" + "="*40 + "\n")
     print(f'Welcome to Simplybot\n')
 
     print('There are several capabilities Simplybot can do, type:')
@@ -7,3 +9,4 @@ def show_menu():
     print('randf -> to return a random fact')
     print('showweather -> to return the specified location\' weather.')
     print('exit -> to exit chatbot\n')
+    print("\n" + "="*40 + "\n")
