@@ -12,10 +12,12 @@ import menu
 
 # Predefined modules
 from typing import List
+from colorama import Fore, Style, init
 
 # Variables needed
 operations: List[str] = ["add", "subtract", "divide", "multiply"]
     
+init(autoreset=True)
 # Main function
 def main():
     
@@ -26,6 +28,7 @@ def main():
     while True:
         
         # Opening
+        menu.title()
         menu.show_menu()
 
         # First user input
@@ -36,32 +39,45 @@ def main():
             continue
 # Chatbot implementation
         if inputChoice == 'chat':
-            print("\n" + "="*40 + "\n")
-            
-            while True:
-                chat_input: str = input("You: ")
+            print("\n" + Fore.YELLOW + "="*50 + "\n")
+            print(Fore.GREEN + Style.BRIGHT + "💬 Entering Chat Mode...\n")
+            print(Fore.WHITE + "Type " + Fore.CYAN + "'quit'" + Fore.WHITE + " to exit the chat feature.\n")
 
-                if chat_input.lower() == 'quit':
+            while True:
+                chat_input = input(Fore.CYAN + "You: " + Fore.RESET).strip().lower()
+
+                if chat_input == 'quit':
+                    print("\n" + Fore.GREEN + "Simplybot: Goodbye! Have a great day! 🌞\n")
                     break
 
-                # Find closely related question from the Dictionary to a List
-                best_match = chatbot.find_best_match(chat_input, [question["question"] for question in knowledge_base["questions"]])
+                if not chat_input:
+                    print(Fore.RED + "Simplybot: Please type something before pressing Enter.")
+                    continue
+
+                # Match question
+                questions_list = [q["question"] for q in knowledge_base["questions"]]
+                best_match = chatbot.find_best_match(chat_input, questions_list)
 
                 if best_match:
-                    answer: str = chatbot.get_answer_for_question(best_match, knowledge_base)
-                    print(f'Simplybot: {answer}')
+                    answer = chatbot.get_answer_for_question(best_match, knowledge_base)
+                    print(Fore.GREEN + f"\nSimplybot: {answer}\n")
                 else:
-                    print(f'Simplybot: I do now know the answer for that one! You can train me by adding me a new knowledge.')
-                    new_answer: str = input("Type the answer or 'skip' to skip: ")
+                    print(Fore.YELLOW + "\nSimplybot: I don’t know the answer to that one yet!")
+                    new_answer = input(Fore.WHITE + "You can teach me! Type the answer or 'skip' to skip: ").strip()
 
-                    if new_answer.lower() != 'skip':
-                        knowledge_base["questions"].append({"question": chat_input, "answer": new_answer})
+                    if new_answer.lower() != 'skip' and new_answer:
+                        knowledge_base["questions"].append({
+                            "question": chat_input,
+                            "answer": new_answer
+                        })
                         chatbot.save_knowledge('knowledge_base.json', knowledge_base)
-                        print(f'Thank you for this knowledge!')
+                        chatbot.save_to_backup('backup.json', knowledge_base)
+                        print(Fore.GREEN + "Simplybot: Thank you! I’ve learned something new! 🤖\n")
                     else:
-                        break
-            
-            print("\n" + "="*40 + "\n")
+                        print(Fore.CYAN + "Simplybot: No worries! Maybe next time.\n")
+
+                print(Fore.YELLOW + "=" * 50 + "\n")
+
             
 # Basic Math calculations
         elif inputChoice == 'math':

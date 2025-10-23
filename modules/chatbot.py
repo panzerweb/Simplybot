@@ -14,6 +14,11 @@ def save_knowledge(file_path: str, data: dict):
     with open(file_path, 'w') as file:
         json.dump(data, file, indent=2)
 
+# Dumps knowledge into backup file
+def save_to_backup(file_path: str, data: dict):
+    with open(file_path, 'w') as file:
+        json.dump(data, file, indent=2)
+
 # Find best match
 # Uses the get_close_matches() to find the best question in the questions dictionary
 # that is assumed from the JSON file
@@ -24,7 +29,7 @@ def find_best_match(user_question: str, questions: list[str]) -> str | None:
 
 # Get answer for question from the knowledge_base acquired from the file
 # Assume that we have extracted the JSON file already with load_knowledge()
-def get_answer_for_question(question: str, knowledge_base: dict) -> str | None:
-    for question in knowledge_base["questions"]:
-        if question["question"] == question:
-            return question["answer"]
+def get_answer_for_question(best_match: str, knowledge_base: dict) -> str | None:
+    for item in knowledge_base["questions"]:
+        if item["question"] == best_match:
+            return item["answer"]
